@@ -4,9 +4,6 @@ on:
       - master
   pull_request:
 
-defaults:
-  run:
-    working-directory: ${{ env.tf_actions_working_dir }}
 
 jobs:
   build:
@@ -19,7 +16,7 @@ jobs:
     - name: Terraform fmt
       id: fmt
       run: terraform fmt -check
-      continue-on-error: true
+      # continue-on-error: true
 
     - name: Terraform Init
       id: init
