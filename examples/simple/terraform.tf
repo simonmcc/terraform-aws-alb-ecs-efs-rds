@@ -15,7 +15,7 @@ variable "config" {
 }
 
 variable "private_registry_access_token" {
-  type = map
+  type    = map
   default = {}
 }
 
