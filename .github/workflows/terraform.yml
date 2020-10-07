@@ -29,7 +29,7 @@ jobs:
 
           <details><summary>Show Details</summary>
 
-          \`\`\`${steps.fmt.outputs.stdout}\`\`\`
+          \`\`\`${{steps.fmt.outputs.stdout}}\`\`\`
 
           </details>
 
