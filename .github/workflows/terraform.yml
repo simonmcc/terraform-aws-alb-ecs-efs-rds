@@ -27,9 +27,9 @@ jobs:
         script: |
           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
 
-          <details><summary>Show Plan</summary>
+          <details><summary>Show Details</summary>
 
-          \`\`\`${process.env.PLAN}\`\`\`
+          \`\`\`${steps.fmt.outputs.stdout}\`\`\`
 
           </details>
 
@@ -42,3 +42,6 @@ jobs:
             body: output
           })
 
+    - name: Terraform Fmt Status
+      if: steps.fmt.outcome == 'failure'
+      run: exit 1
