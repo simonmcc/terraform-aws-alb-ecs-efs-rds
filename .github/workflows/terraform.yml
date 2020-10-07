@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+
+jobs:
+  build:
+    name: Terraform Validation
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v1.2.0
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check -recursive -diff
+      continue-on-error: true
+
+    - uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+
+          <details><summary>Show Details</summary>
+
+          \`\`\`${{steps.fmt.outputs.stdout}} \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
+    - name: Terraform Fmt Status
+      if: steps.fmt.outcome == 'failure'
+      run: exit 1

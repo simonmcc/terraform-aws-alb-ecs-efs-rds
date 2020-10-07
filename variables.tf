@@ -1,5 +1,5 @@
 variable "name" {
-  type    = string
+  type        = string
   description = "prefix for any unique resource"
 }
 
@@ -46,7 +46,7 @@ variable "fargate_memory" {
 }
 
 variable "private_registry_access_token" {
-  type = map
+  type    = map
   default = {}
 }
 
